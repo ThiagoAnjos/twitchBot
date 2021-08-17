@@ -4,7 +4,6 @@ import general from "../general.js"
 
 async function checkMessage(channel, tags, username, client, message) {
     await saveMessage(channel, username, tags, message);
-    client.say(channel, `@${username}: ${message}`);
 }
 
 async function saveMessage(channel, username, tags, message) {
@@ -21,7 +20,7 @@ async function saveMessage(channel, username, tags, message) {
         if (err) {
             console.log(err);
         } else {
-            console.log(`Mensagem salva! 🥇`)
+            console.log(`[${channel}]Mensagem salva! 🥇`)
         }
     })
     return;

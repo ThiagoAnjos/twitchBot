@@ -9,8 +9,13 @@ function generalFunction(channel, tags, message, self, username, client) {
 }
 
 function shortDate() {
-    var data = new Date().toISOString().split('T');
-    return data[0].split('-').join('');
+    var data = new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" }).split(' ');
+    let a = data[0].split('/');
+    let short = [];
+    short.push(a[2]);
+    short.push(a[1]);
+    short.push(a[0]);
+    return short.join('');
 }
 
 function shortDateYYYYMM() {
@@ -19,6 +24,7 @@ function shortDateYYYYMM() {
     data = data[0].split('-')
     return newData.concat(data[0], data[1]).join('');
 }
+
 
 
 export default {

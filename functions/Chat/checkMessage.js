@@ -3,17 +3,20 @@ import messages from "../../models/messages.js"
 import general from "../general.js"
 import Commads from "../Chat/commands.js"
 import twitchApi from "../twitchAPI/apiFunctions.js"
+import MelhorEnvio from "../melhorEnvioAPI/meFunctions.js"
 
 async function checkMessage(channel, tags, username, client, message) {
     await saveMessage(channel, username, tags, message);
     //await taxar(channel, username, tags, message, client);
     //await Commads.checkCommands(channel, username, tags, message, client);
+    if (channel == '#rafakkov') {
+        MelhorEnvio.calculaFrete(message, tags, channel, client);
+    }
 }
 
 async function saveMessage(channel, username, tags, message) {
     await dbConnect();
     let infos = await twitchApi.getChannelInfo(tags['room-id']);
-    console.log(infos[0].game_name);
     const newMessage = new messages({
         username: username,
         displayName: tags['display-name'],
@@ -84,6 +87,13 @@ async function taxar(channel, username, tags, message, client) {
             })
             client.timeout(channel, tags['username'], msg[3]);
         }
+    }
+}
+
+async function calculaFrete(channel, username, tags, message, client) {
+    if (channel == '#rafakkov') {
+        const msg = message.toUpperCase().split(' ');
+        console.log(msg)
     }
 }
 

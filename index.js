@@ -60,7 +60,7 @@ clientPod.on('chat', async (channel, tags, message, self) => {
     let username = tags['username'];
     if (self) {
         return;
-    } else {
+    } else if (channel != '#ojarlos') {
         general.generalFunction(channel, tags, message, self, username, client);
     }
 });

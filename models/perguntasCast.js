@@ -18,7 +18,7 @@ const schema = new mongoose.Schema({
         required: true,
         index: true
     },
-    message: {
+    pergunta: {
         type: String,
         index: true,
         required: true,

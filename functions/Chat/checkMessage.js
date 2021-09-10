@@ -4,6 +4,7 @@ import general from "../general.js"
 import Commads from "../Chat/commands.js"
 import twitchApi from "../twitchAPI/apiFunctions.js"
 import MelhorEnvio from "../melhorEnvioAPI/meFunctions.js"
+import perguntas from "../../models/perguntasCast.js"
 
 async function checkMessage(channel, tags, username, client, message) {
     await saveMessage(channel, username, tags, message);
@@ -12,6 +13,41 @@ async function checkMessage(channel, tags, username, client, message) {
     if (channel == '#rafakkov') {
         MelhorEnvio.calculaFrete(message, tags, channel, client);
     }
+    if (channel == '#ojarlos') {
+        if (message.toLowerCase().startsWith('!pergunta')
+            || message.toLowerCase().startsWith('!perguntas')) {
+            let args = message.split(' ');
+            console.log(args);
+            const a = args.shift();
+            const pergunta = args.join(' ');
+            console.log(pergunta);
+            await dbConnect();
+            let infos = await twitchApi.getChannelInfo(tags['room-id']);
+            const newPergunta = perguntas({
+                username: tags['username'],
+                displayName: tags['display-name'],
+                channel: channel,
+                pergunta: pergunta,
+                channelId: tags['room-id'],
+                messageId: tags['id'],
+                channelGame: infos[0] ? infos[0].game_name : 'undefined',
+                channelGameId: infos[0] ? infos[0].game_id : 'undefined',
+                channelTitle: infos[0] ? infos[0].title : 'undefined',
+                shortDate: general.shortDate(),
+                fullDate: new Date(),
+                isAwnsered: false
+            })
+            newPergunta.save((err) => {
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log(`[${channel}]Pergunta salva! 🥇`)
+                }
+            })
+            return;
+        }
+    }
+
 }
 
 async function saveMessage(channel, username, tags, message) {
@@ -24,13 +60,12 @@ async function saveMessage(channel, username, tags, message) {
         channelId: tags['room-id'],
         messageId: tags['id'],
         message: message,
-        channelGame: infos[0].game_name,
-        channelGameId: infos[0].game_id,
-        channelTitle: infos[0].title,
+        channelGame: infos[0] ? infos[0].game_name : 'undefined',
+        channelGameId: infos[0] ? infos[0].game_id : 'undefined',
+        channelTitle: infos[0] ? infos[0].title : 'undefined',
         shortDate: general.shortDate(),
         fullDate: new Date()
     });
-
     newMessage.save((err) => {
         if (err) {
             console.log(err);

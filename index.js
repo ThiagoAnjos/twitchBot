@@ -15,13 +15,34 @@ const client = new Client({
     }
 })
 
+const clientPod = new Client({
+    identity: {
+        username: process.env.BOTNAME_POD,
+        password: process.env.BOTPASS_POD
+    },
+    channels: process.env.CHANNELS_POD.split(',').map(channel => channel.trim()).filter(c => c.length > 0),
+    connection: {
+        reconnect: true
+    }
+})
+
 client.connect();
 client.on('connected', (addr, port) => {
-    console.log(`Bot conectado com sucesso ${addr}:${port}`);
+    console.log(`[#fiscalDePintada] Bot conectado com sucesso ${addr}:${port}`);
 });
 client.on('join', (channel, username, self) => {
     if (self) {
-        console.log(`Entrando no canal ${channel}`);
+        console.log(`[#fiscalDePintada] Entrando no canal ${channel}`);
+    }
+});
+
+clientPod.connect();
+clientPod.on('connected', (addr, port) => {
+    console.log(`[#pausaProBot] Bot conectado com sucesso ${addr}:${port}`);
+});
+clientPod.on('join', (channel, username, self) => {
+    if (self) {
+        console.log(`[#pausaProBot] Entrando no canal ${channel}`);
     }
 });
 
@@ -31,6 +52,15 @@ client.on('chat', async (channel, tags, message, self) => {
     if (self) {
         return;
     } else {
+        general.generalFunction(channel, tags, message, self, username, client);
+    }
+});
+
+clientPod.on('chat', async (channel, tags, message, self) => {
+    let username = tags['username'];
+    if (self) {
+        return;
+    } else if (channel != '#ojarlos') {
         general.generalFunction(channel, tags, message, self, username, client);
     }
 });

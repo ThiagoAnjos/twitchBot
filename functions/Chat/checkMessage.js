@@ -13,7 +13,7 @@ async function checkMessage(channel, tags, username, client, message) {
     if (channel == '#rafakkov') {
         MelhorEnvio.calculaFrete(message, tags, channel, client);
     }
-    if (channel == '#ojarlos') {
+    if (channel == '#ojarlos' || channel == '#vitorcaffe') {
         if (message.toLowerCase().startsWith('!pergunta')
             || message.toLowerCase().startsWith('!perguntas')) {
             let args = message.split(' ');

@@ -106,3 +106,9 @@ client.on("subscription", (channel, username, method, message, userstate) => {
     // Do your stuff.
     console.log()
 });
+
+// Usuário recebe timeout
+client.on("timeout", (channel, username, reason, duration, userstate) => {
+    console.log(`${channel} : ${username} : ${reason} : ${duration} : ${userstate[]}`)
+    // #rafakkov : thezig21 : null : 5 : [object Object]
+});

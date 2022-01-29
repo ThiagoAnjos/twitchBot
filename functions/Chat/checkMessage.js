@@ -5,10 +5,11 @@ import Commads from "../Chat/commands.js"
 import twitchApi from "../twitchAPI/apiFunctions.js"
 import MelhorEnvio from "../melhorEnvioAPI/meFunctions.js"
 
+
 async function checkMessage(channel, tags, username, client, message) {
     await saveMessage(channel, username, tags, message);
-    //await taxar(channel, username, tags, message, client);
-    //await Commads.checkCommands(channel, username, tags, message, client);
+    await taxar(channel, username, tags, message, client);
+    await Commads.checkCommands(channel, username, tags, message, client);
     if (channel == '#rafakkov') {
         MelhorEnvio.calculaFrete(message, tags, channel, client);
     }
@@ -30,7 +31,7 @@ async function saveMessage(channel, username, tags, message) {
         shortDate: general.shortDate(),
         fullDate: new Date()
     });
-    console.log(newMessage);
+    console.log(newMessage, tags['badges']);
     newMessage.save((err) => {
         if (err) {
             console.log(err);

@@ -2,6 +2,7 @@ import { Client } from "tmi.js"
 import "dotenv/config.js"
 import general from "./functions/general.js"
 import cheer from "./functions/Cheer/cheerFunctions.js"
+import timeout from "./functions/Chat/timeoutFunctions.js"
 
 
 const client = new Client({
@@ -68,7 +69,23 @@ clientPod.on('chat', async (channel, tags, message, self) => {
 // Verifica quando recebe um Cheer [bit]
 client.on("cheer", (channel, userstate, message) => {
     cheer.saveCheer(channel, userstate, message);
+    if (userstate.bits = 100) {
+        cheer.saveCheerPergunta(channel, userstate, message);
+    } else if (userstate.bits = 250) {
+        cheer.saveCheerDesafio(channel, userstate, message);
+    }
 });
+
+// Usuário recebe timeout
+client.on("timeout", async (channel, username, reason, duration, userstate) => {
+    await timeout.saveTimeout(channel, username, reason, duration, userstate);
+    console.log(`${channel} : ${username} : ${reason} : ${duration} : ${userstate}`);
+    //#rafakkov : thezig21 : null : 5 : [object Object]
+});
+
+
+// Funções não implementadas //
+
 
 // Usuário continua com o Sub que recebeu de um anônimo
 client.on("anongiftpaidupgrade", (channel, username, userstate) => {
@@ -104,5 +121,5 @@ client.on("submysterygift", (channel, username, numbOfSubs, methods, userstate) 
 // Usuário da sub no caral
 client.on("subscription", (channel, username, method, message, userstate) => {
     // Do your stuff.
-    console.log()
+    console.log(channel, username, method, message, userstate)
 });

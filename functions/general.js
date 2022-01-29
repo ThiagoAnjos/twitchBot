@@ -1,5 +1,7 @@
 import Subscribe from "./Chat/checkSub.js";
 import Message from "./Chat/checkMessage.js"
+import CheersPergunta from "../models/cheersPergunta.js"
+import CheersDesafio from "../models/cheersDesafio.js"
 
 function generalFunction(channel, tags, message, self, username, client) {
 
@@ -25,10 +27,25 @@ function shortDateYYYYMM() {
     return newData.concat(data[0], data[1]).join('');
 }
 
+async function getTotalPerguntasPagas() {
+    let total;
+    await CheersPergunta.countDocuments({}, function (err, count) {
+        total = count;
+    })
+    total;
+}
 
+function getTotalDesafiosPagos() {
+    CheersDesafio.countDocuments({}, function (err, count) {
+        count;
+    })
+    count;
+}
 
 export default {
     generalFunction,
     shortDate,
-    shortDateYYYYMM
+    shortDateYYYYMM,
+    getTotalPerguntasPagas,
+    getTotalDesafiosPagos
 };

@@ -61,7 +61,7 @@ clientPod.on('chat', async (channel, tags, message, self) => {
     let username = tags['username'];
     if (self) {
         return;
-    } else {
+    } else if (channel != '#ojarlos') {
         general.generalFunction(channel, tags, message, self, username, client);
     }
 });
@@ -121,5 +121,15 @@ client.on("submysterygift", (channel, username, numbOfSubs, methods, userstate) 
 // Usuário da sub no caral
 client.on("subscription", (channel, username, method, message, userstate) => {
     // Do your stuff.
+<<<<<<< HEAD
     console.log(channel, username, method, message, userstate)
+=======
+    console.log()
+});
+
+// Usuário recebe timeout
+client.on("timeout", (channel, username, reason, duration, userstate) => {
+    console.log(`${channel} : ${username} : ${reason} : ${duration} : ${userstate[]}`)
+    // #rafakkov : thezig21 : null : 5 : [object Object]
+>>>>>>> main
 });

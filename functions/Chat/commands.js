@@ -9,7 +9,7 @@ import Pontuacao from "../../models/pontuacao.js"
 
 async function checkCommands(channel, username, tags, message, client) {
 
-    if (channel == '#rafakkov') {
+    if (channel == '#rafakkov' || channel == '#tafasFPS') {
         const args = message.split(' ');
         const msg = message.toUpperCase().split(' ');
         const command = args.shift();
@@ -64,7 +64,7 @@ async function checkCommands(channel, username, tags, message, client) {
                         default:
                             break;
                     }
-                    break;
+                    break;*/
                 case "%piada":
                     let nota = Math.floor(Math.random() * 10);
                     let data = new Date();
@@ -102,12 +102,12 @@ async function checkCommands(channel, username, tags, message, client) {
                         } else {
                             if (nota >= 0 && nota <= 2) {
                                 client.say(channel, `@${tags.username} meu amigo, essa piada foi tão ruim que vou te dar nota ${nota} e um timeout`);
-                                /* if (nota == 0) {
-                                     return client.say(channel, `/timeout @${tag.username} 25`);
-                                 } else {
-                                     return client.say(channel, `/timeout @${tag.username} ${nota * 10}`);
-                                 }
-                                 
+                                if (nota == 0) {
+                                    return client.say(channel, `/timeout @${tag.username} 25`);
+                                } else {
+                                    return client.say(channel, `/timeout @${tag.username} ${nota * 10}`);
+                                }
+
 
                             } else if (nota <= 5) {
                                 return client.say(channel, `Olha @${tags.username} já vi piores. Nota ${nota} pra essa 'piada'`);
@@ -121,7 +121,7 @@ async function checkCommands(channel, username, tags, message, client) {
 
                         }
                     });
-                    break;*/
+                    break;
                 case "%placarto":
                     await dbConnect();
                     const result = await OlimpiadasSchema.aggregate([
@@ -160,7 +160,7 @@ async function checkCommands(channel, username, tags, message, client) {
 
                     break;
                 case "%resposta":
-                    if (tags['mod'] || tags['badges']?.broadcaster) {
+                    if ((tags['mod'] || tags['badges']?.broadcaster) && ('a' == 'b')) {
                         client.say(channel, `Pergunta respondida!`);
                         await dbConnect();
                         const newMessage = new respostas({
@@ -176,11 +176,11 @@ async function checkCommands(channel, username, tags, message, client) {
                             }
                         })
                     } else {
-                        client.say(channel, `Apenas moderadores podem usar o comando!`);
+                        client.say(channel, `Apenas moderadores podem usar o comando ou ainda não é a hora!`);
                     }
                     break;
                 case "%desafio":
-                    if (tags['mod'] || tags['badges']?.broadcaster) {
+                    if ((tags['mod'] || tags['badges']?.broadcaster) && ('a' == 'b')) {
                         client.say(channel, `Desafio realizado!`);
                         await dbConnect();
                         const newMessage = new desafios({
@@ -196,7 +196,7 @@ async function checkCommands(channel, username, tags, message, client) {
                             }
                         })
                     } else {
-                        client.say(channel, `Apenas moderadores podem usar o comando!`);
+                        client.say(channel, `Apenas moderadores podem usar o comando ou ainda não é a hora!`);
                     }
                     break;
                 case "%totalPerguntas":
@@ -207,7 +207,6 @@ async function checkCommands(channel, username, tags, message, client) {
                     let filaPerguntas = perguntasPagas - perguntasRespondidas;
                     let perguntasFaltantes = 62 - perguntasRespondidas;
                     if (filaPerguntas < 0) { filaPerguntas = 0 } else { filaPerguntas }
-                    console.log(`${perguntasPagas}`)
                     client.say(channel, `💬 Total de perguntas: ${totalPerguntas}`);
                     client.say(channel, `💲 Total de perguntas pagas: ${perguntasPagas}`);
                     client.say(channel, `✅ Total respondidas: ${perguntasRespondidas}`);
@@ -215,7 +214,7 @@ async function checkCommands(channel, username, tags, message, client) {
                     client.say(channel, `🕐 Total na fila: ${filaPerguntas}`);
                     break;
                 case "%meninos":
-                    if (tags['mod'] || tags['badges']?.broadcaster) {
+                    if ((tags['mod'] || tags['badges']?.broadcaster) && ('a' == 'b')) {
                         client.say(channel, `Ponto para os MENINOS 👦`);
                         await dbConnect();
                         const newMessage = new Pontuacao({
@@ -229,7 +228,7 @@ async function checkCommands(channel, username, tags, message, client) {
                             }
                         })
                     } else {
-                        client.say(channel, `Apenas moderadores podem usar o comando!`);
+                        client.say(channel, `Apenas moderadores podem usar o comando ou ainda não é a hora!!`);
                     }
                     break;
                 case "%meninas":
@@ -247,7 +246,7 @@ async function checkCommands(channel, username, tags, message, client) {
                             }
                         })
                     } else {
-                        client.say(channel, `Apenas moderadores podem usar o comando!`);
+                        client.say(channel, `Apenas moderadores podem usar o comando ou ainda não é a hora!!`);
                     }
                     break;
                 case "%totalDesafios":
@@ -258,7 +257,6 @@ async function checkCommands(channel, username, tags, message, client) {
                     let filaDesafios = (desafiosPagos + 8) - desafiosRespondidas;
                     if (filaDesafios < 0) { filaDesafios = 0 } else { filaDesafios }
                     let desafiosFaltantes = 30 - desafiosRespondidas
-                    console.log(`${perguntasPagas}`)
                     client.say(channel, `💬 Total de desafios: ${totalDesafios}`);
                     client.say(channel, `💲 Total de desafios pagos: ${desafiosPagos + 8}`);
                     client.say(channel, `✅ Total de desafios executados: ${desafiosRespondidas}`);

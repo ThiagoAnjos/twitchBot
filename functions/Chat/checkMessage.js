@@ -67,10 +67,7 @@ async function saveMessage(channel, username, tags, message) {
         shortDate: general.shortDate(),
         fullDate: new Date()
     });
-<<<<<<< HEAD
     console.log(newMessage, tags['badges']);
-=======
->>>>>>> main
     newMessage.save((err) => {
         if (err) {
             console.log(err);

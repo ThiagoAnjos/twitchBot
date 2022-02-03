@@ -5,11 +5,13 @@ import desafios from "../../models/desafios.js"
 import CheersPergunta from "../../models/cheersPergunta.js"
 import CheersDesafio from "../../models/cheersDesafio.js"
 import Pontuacao from "../../models/pontuacao.js"
+import csgo from "../csgoAPI/csgoFunctions.js"
+import general from "../general.js"
 
 
 async function checkCommands(channel, username, tags, message, client) {
 
-    if (channel == '#rafakkov' || channel == '#tafasFPS') {
+    if (channel == '#rafakkov' || channel == '#tafasfps') {
         const args = message.split(' ');
         const msg = message.toUpperCase().split(' ');
         const command = args.shift();
@@ -270,11 +272,72 @@ async function checkCommands(channel, username, tags, message, client) {
                     client.say(channel, `🏅 Placar atual 🏅`);
                     client.say(channel, `👧 MENINAS ${pontosMeninas + 11} X ${pontosMeninos} MENINOS 👦`);
                     break;
+                case "%eventos":
+                    const m = await csgo.getMatches();
+                    let evts = []
+                    m.forEach(evt => {
+                        let nome = evt.event.name
+                        if (evts.indexOf(nome) < 0) {
+                            evts.push(nome)
+                        } else {
+                        }
+                    });
+                    if (evts.length > 0) {
+                        client.say(channel, `Lista de eventos`)
+                        evts.forEach(element => {
+                            client.say(channel, `✅ ${element}`)
+                        });
+                    } else {
+                        client.say(channel, `Não encontramos eventos no momento!`)
+                    }
+
+                    break;
+
+                case "%partidas":
+                    const matches = await csgo.getMatches();
+                    let evento = msg[1];
+                    console.log(evento)
+                    let dt = general.shortDate();
+                    dt = dt.substr(6, 2) + '/' + dt.substr(4, 2) + '/' + dt.substr(0, 4)
+                    let count = 0;
+                    matches.forEach(match => {
+                        let splitedEventName = match.event.name.toUpperCase().split(' ');
+                        if (msg.length > 0 && evento?.toUpperCase() == 'ALL') {
+                            let horario = new Date(match.time)
+                            horario = horario.toLocaleString('pt-BR')
+                            if (dt == horario.substr(0, 10)) {
+                                client.say(channel, `${match.event.name}`)
+                                client.say(channel, `🆔 ${match.id} 🕑 ${horario} 🔫 ${match.teams[0].name} [${match.teams[0].id}] ❌ ${match.teams[1].name} [${match.teams[1].id}]`)
+                                count++;
+                            }
+                        } else if (splitedEventName.indexOf(evento) >= 0) {
+                            let horario = new Date(match.time)
+                            horario = horario.toLocaleString('pt-BR')
+                            if (dt == horario.substr(0, 10)) {
+                                client.say(channel, `${match.event.name}`)
+                                client.say(channel, `🆔 ${match.id} 🕑 ${horario} 🔫 ${match.teams[0].name} [${match.teams[0].id}] ❌ ${match.teams[1].name} [${match.teams[1].id}]`)
+                                count++;
+                            }
+                        }
+                    });
+                    if (count == 0) {
+                        client.say(channel, `Não encontramos partidas para hoje!`)
+                    }
+                    break;
+                case "%partida":
+                    break;
+                case "%topplayer":
+                    break;
+                case "%player":
+                    break;
+                case "%resultado":
+                    break;
+                case "%times":
+                    break;
+                case "%time": w
+                    break;
                 default:
-                    console.log(`a`)
-                    /*await dbConnect();
-                    const cmd = await CommandSchema.findOne({ name: command.startsWith('%') ? command : `% ${ command } ` });
-                    client.say(channel, cmd.response);*/
+                    console.log(`as`)
                     break;
             }
         }

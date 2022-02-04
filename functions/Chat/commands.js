@@ -292,7 +292,6 @@ async function checkCommands(channel, username, tags, message, client) {
                     }
 
                     break;
-
                 case "%partidas":
                     const matches = await csgo.getMatches();
                     let evento = msg[1];
@@ -326,15 +325,32 @@ async function checkCommands(channel, username, tags, message, client) {
                     break;
                 case "%partida":
                     break;
-                case "%topplayer":
+                case "%topplayers":
+                    const players = await csgo.getTopPlayers()
+                    client.say(channel, `Top 5 jogadores (HLTV - All Time)`)
+                    for (let i = 0; i < 5; i++) {
+                        client.say(channel, `🆔 ${players[i].id} 👨 ${players[i].nickname} 👕 ${players[i].team}`)
+                    }
                     break;
                 case "%player":
+                    const player = await csgo.getPlayerById(msg[1])
+                    if (player) {
+                        client.say(channel, `Nome: ${player.name} - ${player.age} | Nick: ${player.nickname} 👕 ${player.team.name} 💀 ${player.headshots}`)
+                    } else {
+                        client.say(channel, `Jogador com o ID ${msg[1]} não encontrado!`)
+                    }
                     break;
                 case "%resultado":
                     break;
                 case "%times":
+                    const teams = await csgo.getTopTeams()
+                    for (let i = 0; i < 5; i++) {
+                        client.say(channel, `🏅 ${teams[i].ranking} 🆔 ${teams[i].id} 👕 ${teams[i].name}`)
+                    }
                     break;
-                case "%time": w
+                case "%time":
+                    const team = await csgo.getTeamById(msg[1])
+                    client.say(channel, `🏅 ${team.ranking} 👕 ${team.name} 👨🏽‍💻 ${team.coach} 👨 ${team.players[0].nickname} | ${team.players[1].nickname} | ${team.players[2].nickname} | ${team.players[3].nickname} | ${team.players[4].nickname}`)
                     break;
                 default:
                     console.log(`as`)

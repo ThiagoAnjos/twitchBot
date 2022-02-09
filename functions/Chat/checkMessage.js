@@ -9,7 +9,7 @@ import perguntas from "../../models/perguntasCast.js"
 
 async function checkMessage(channel, tags, username, client, message) {
     await saveMessage(channel, username, tags, message);
-    await taxar(channel, username, tags, message, client);
+    //await taxar(channel, username, tags, message, client);
     await Commads.checkCommands(channel, username, tags, message, client);
     if (channel == '#rafakkov') {
         MelhorEnvio.calculaFrete(message, tags, channel, client);
@@ -86,7 +86,8 @@ async function taxar(channel, username, tags, message, client) {
         if (tags['mod'] || tags['badges']?.broadcaster) {
 
             client.say(channel, `Sim mestre ${tags['username']}! ${msg[2]} vai 🍼 por ${msg[3]} s`);
-            /***/
+            client.timeout(channel, msg[2], msg[3]);
+            /**
             await dbConnect();
             const timeOut = new OlimpiadasSchema({
                 admin: tags.username,
@@ -101,13 +102,14 @@ async function taxar(channel, username, tags, message, client) {
                 } else {
                     console.log(`sucesso 🥇`)
                 }
-            })
-            client.timeout(channel, msg[2], msg[3]);
+            })*/
+
         } else {
             client.say(channel, `@${tags['username']}, quem é você na fila do pão ? `);
             client.say(channel, `@${tags['username']}, toma um TO pra largar de ser besta!`);
+            client.timeout(channel, tags['username'], msg[3]);
 
-            await dbConnect();
+            /*await dbConnect();
             const timeOut = new OlimpiadasSchema({
                 admin: 'CHAT',
                 username: `@${tags.username}`,
@@ -121,8 +123,8 @@ async function taxar(channel, username, tags, message, client) {
                 } else {
                     console.log(`sucesso 🥇`)
                 }
-            })
-            client.timeout(channel, tags['username'], msg[3]);
+            })*/
+
         }
     }
 }

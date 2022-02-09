@@ -11,7 +11,7 @@ import general from "../general.js"
 
 async function checkCommands(channel, username, tags, message, client) {
 
-    if (channel == '#rafakkov' || channel == '#tafasfps') {
+    if (client.username == 'fiscaldepintada') {
         const args = message.split(' ');
         const msg = message.toUpperCase().split(' ');
         const command = args.shift();
@@ -28,7 +28,7 @@ async function checkCommands(channel, username, tags, message, client) {
                                 name: commandName.startsWith('%') ? commandName : `%${commandName}`,
                                 response: commandResp
                             })
-
+    
                             add.save((err) => {
                                 if (err) {
                                     return client.say(channel, 'Ocorreu um erro no comando!');
@@ -37,7 +37,7 @@ async function checkCommands(channel, username, tags, message, client) {
                                 }
                             })
                             break;
-
+    
                         case "edit":
                             await dbConnect();
                             const edit = await CommandSchema.findOne({ name: commandName.startsWith('%') ? commandName : `%${commandName}` })
@@ -54,7 +54,7 @@ async function checkCommands(channel, username, tags, message, client) {
                                 }
                             })
                             break;
-
+    
                         case "del":
                             await dbConnect();
                             const del = CommandSchema.deleteOne({ name: commandName.startsWith('%') ? commandName : `%${commandName}` })
@@ -62,7 +62,7 @@ async function checkCommands(channel, username, tags, message, client) {
                             if (!del.ok) return client.say(channel, 'Ocorreu um erro no comando!');
                             client.say(channel, `${commandName} foi removido com sucesso`);
                             break;
-
+    
                         default:
                             break;
                     }
@@ -90,7 +90,6 @@ async function checkCommands(channel, username, tags, message, client) {
                                 } else {
                                     return client.say(channel, `/timeout @${tag.username} ${nota * 10}`);
                                 }
-
                             } else if (nota <= 5) {
                                 return client.say(channel, `Olha @${tags.username} já vi piores. Nota ${nota} pra essa 'piada'`);
                             } else if (nota <= 7) {
@@ -100,7 +99,6 @@ async function checkCommands(channel, username, tags, message, client) {
                             } else {
                                 return client.say(channel, `Parabéns @${tags.username}! Temos aqui o suprassumo das piadas! Nota ${nota} pra essa obra prima`);
                             }
-
                         } else {
                             if (nota >= 0 && nota <= 2) {
                                 client.say(channel, `@${tags.username} meu amigo, essa piada foi tão ruim que vou te dar nota ${nota} e um timeout`);
@@ -120,7 +118,6 @@ async function checkCommands(channel, username, tags, message, client) {
                             } else {
                                 return client.say(channel, `Parabéns @${tags.username}! Temos aqui o suprassumo das piadas! Nota ${nota} pra essa obra prima`);
                             }
-
                         }
                     });
                     break;
@@ -352,8 +349,112 @@ async function checkCommands(channel, username, tags, message, client) {
                     const team = await csgo.getTeamById(msg[1])
                     client.say(channel, `🏅 ${team.ranking} 👕 ${team.name} 👨🏽‍💻 ${team.coach} 👨 ${team.players[0].nickname} | ${team.players[1].nickname} | ${team.players[2].nickname} | ${team.players[3].nickname} | ${team.players[4].nickname}`)
                     break;
+                case "%taxar":
+                    if (msg.length == 3) {
+                        if (tags['mod'] || tags['badges']?.broadcaster) {
+                            client.say(channel, `Sim mestre ${tags['username']}! ${msg[1]} vai 🍼 por ${msg[2]} s`);
+                            client.timeout(channel, msg[1], msg[2]);
+                        } else {
+                            client.say(channel, `@${tags['username']}, quem é você na fila do pão ? `);
+                            client.say(channel, `@${tags['username']}, toma um TO pra largar de ser besta!`);
+                            client.timeout(channel, tags['username'], msg[2]);
+                        }
+                    } else {
+                        client.say(channel, `Faltam parâmetros no comando! %taxar @usuário tempo`)
+                    }
+                    break;
+                case "%nota":
+                    if (msg.length == 2) {
+                        let nota = Math.floor(Math.random() * 10);
+                        if (msg[1] == '@DMADRIANO') {
+                            nota = Math.floor(Math.random() * 2)
+                        }
+                        if (msg[1] == '@TAFASFPS') {
+                            nota = 11;
+                        }
+                        if (nota < 2) {
+                            client.say(channel, `@${tags['username']} A nota desse lixo ${msg[1]} é ${nota}`)
+                        } else if (nota < 4) {
+                            client.say(channel, `@${tags['username']} essa coisa que você chama de ${msg[1]} merece no máximo um ${nota}`)
+                        } else if (nota < 6) {
+                            client.say(channel, `@${tags['username']}, ${msg[1]} é ${nota}`)
+                        } else if (nota < 8) {
+                            client.say(channel, `@${tags['username']} o/a ${msg[1]} a gente até apresenta pra familia. Um ${nota} não se vê toda hora!`)
+                        } else if (nota < 10) {
+                            client.say(channel, `@${tags['username']} o/a ${msg[1]} é um/a Deus/a grega e merece um ${nota}`)
+                        } else if (nota == 11) {
+                            client.say(channel, `@${tags['username']}, o ${msg[1]} está além da perfeição. Nota ${nota} e ainda é pouco!`)
+                        }
+                    } else {
+                        client.say(channel, `Faltam parâmetros no comando! %nota @usuário`)
+                    }
+                    break;
+                case "%taxar":
+                    if (msg.length == 3) {
+                        if (tags['mod'] || tags['badges']?.broadcaster) {
+                            client.say(channel, `Sim mestre ${tags['username']}! ${msg[1]} vai 🍼 por ${msg[2]} s`);
+                            client.timeout(channel, msg[1], msg[2]);
+                        } else {
+                            client.say(channel, `@${tags['username']}, quem é você na fila do pão ? `);
+                            client.say(channel, `@${tags['username']}, toma um TO pra largar de ser besta!`);
+                            client.timeout(channel, tags['username'], msg[2]);
+                        }
+                    } else {
+                        client.say(channel, `Faltam parâmetros no comando! %taxar @usuário tempo`)
+                    }
+                    break;
                 default:
-                    console.log(`as`)
+                    break;
+            }
+        }
+    }
+    if (client.username == 'pausaprobot') {
+        const args = message.split(' ');
+        const msg = message.toUpperCase().split(' ');
+        const command = args.shift();
+        if (command.startsWith('%')) {
+            switch (command) {
+                case "%taxar":
+                    if (msg.length == 3) {
+                        if (tags['mod'] || tags['badges']?.broadcaster) {
+                            client.say(channel, `Sim mestre ${tags['username']}! ${msg[1]} vai 🍼 por ${msg[2]} s`);
+                            client.timeout(channel, msg[1], msg[2]);
+                        } else {
+                            client.say(channel, `@${tags['username']}, quem é você na fila do pão ? `);
+                            client.say(channel, `@${tags['username']}, toma um TO pra largar de ser besta!`);
+                            client.timeout(channel, tags['username'], msg[2]);
+                        }
+                    } else {
+                        client.say(channel, `Faltam parâmetros no comando! %taxar @usuário tempo`)
+                    }
+                    break;
+                case "%nota":
+                    if (msg.length == 2) {
+                        let nota = Math.floor(Math.random() * 10);
+                        if (msg[1] == '@DMADRIANO') {
+                            nota = Math.floor(Math.random() * 2)
+                        }
+                        if (msg[1] == '@TAFASFPS') {
+                            nota = 11;
+                        }
+                        if (nota < 2) {
+                            client.say(channel, `@${tags['username']} A nota desse lixo ${msg[1]} é ${nota}`)
+                        } else if (nota < 4) {
+                            client.say(channel, `@${tags['username']} essa coisa que você chama de ${msg[1]} merece no máximo um ${nota}`)
+                        } else if (nota < 6) {
+                            client.say(channel, `@${tags['username']}, ${msg[1]} é ${nota}`)
+                        } else if (nota < 8) {
+                            client.say(channel, `@${tags['username']} o/a ${msg[1]} a gente até apresenta pra familia. Um ${nota} não se vê toda hora!`)
+                        } else if (nota < 10) {
+                            client.say(channel, `@${tags['username']} o/a ${msg[1]} é um/a Deus/a grega e merece um ${nota}`)
+                        } else if (nota == 11) {
+                            client.say(channel, `@${tags['username']}, o ${msg[1]} está além da perfeição. Nota ${nota} e ainda é pouco!`)
+                        }
+                    } else {
+                        client.say(channel, `Faltam parâmetros no comando! %nota @usuário`)
+                    }
+                    break;
+                default:
                     break;
             }
         }

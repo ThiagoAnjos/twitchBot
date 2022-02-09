@@ -62,7 +62,7 @@ clientPod.on('chat', async (channel, tags, message, self) => {
     if (self) {
         return;
     } else {
-        general.generalFunction(channel, tags, message, self, username, client);
+        general.generalFunction(channel, tags, message, self, username, clientPod);
     }
 });
 
@@ -80,7 +80,6 @@ client.on("cheer", (channel, userstate, message) => {
 client.on("timeout", async (channel, username, reason, duration, userstate) => {
     await timeout.saveTimeout(channel, username, reason, duration, userstate);
     console.log(`${channel} : ${username} : ${reason} : ${duration} : ${userstate}`);
-    //#rafakkov : thezig21 : null : 5 : [object Object]
 });
 
 
@@ -130,3 +129,59 @@ client.on("timeout", (channel, username, reason, duration, userstate) => {
     console.log(`${channel} : ${username} : ${reason} : ${duration} : ${userstate[]}`)
     // #rafakkov : thezig21 : null : 5 : [object Object]
 */
+
+
+
+// Verifica quando recebe um Cheer [bit]
+client.on("cheer", (channel, userstate, message) => {
+    cheer.saveCheer(channel, userstate, message);
+    if (userstate.bits = 100) {
+        cheer.saveCheerPergunta(channel, userstate, message);
+    } else if (userstate.bits = 200) {
+        cheer.saveCheerDesafio(channel, userstate, message);
+    }
+});
+
+// Usuário recebe timeout
+client.on("timeout", async (channel, username, reason, duration, userstate) => {
+    await timeout.saveTimeout(channel, username, reason, duration, userstate);
+    console.log(`${channel} : ${username} : ${reason} : ${duration} : ${userstate}`);
+});
+
+
+// Usuário continua com o Sub que recebeu de um anônimo
+clientPod.on("anongiftpaidupgrade", (channel, username, userstate) => {
+    console.log(channel, username, userstate);
+});
+
+// Usuário continua com o Sub que recebeu de alguém [sender]
+clientPod.on("giftpaidupgrade", (channel, username, sender, userstate) => {
+    console.log(channel, username, sender, userstate)
+});
+
+// Usuário dá resub [sequência de x meses]
+clientPod.on("resub", (channel, username, months, message, userstate, methods) => {
+    // Do your stuff.
+    let cumulativeMonths = ~~userstate["msg-param-cumulative-months"];
+    console.log(channel, username, months, message, userstate, methods, cumulativeMonths)
+});
+
+// Usuário dá sub para alguém
+clientPod.on("subgift", (channel, username, streakMonths, recipient, methods, userstate) => {
+    // Do your stuff.
+    let senderCount = ~~userstate["msg-param-sender-count"];
+    console.log(channel, username, streakMonths, recipient, methods, userstate, senderCount)
+});
+
+// Usuário dá sub para o canal
+clientPod.on("submysterygift", (channel, username, numbOfSubs, methods, userstate) => {
+    // Do your stuff.
+    let senderCount = ~~userstate["msg-param-sender-count"];
+    console.log(channel, username, numbOfSubs, methods, userstate, senderCount)
+});
+
+// Usuário da sub no caral
+clientPod.on("subscription", (channel, username, method, message, userstate) => {
+    // Do your stuff.
+    console.log(channel, username, method, message, userstate)
+});

@@ -1,3 +1,5 @@
 ./node_modules
+./.vscode
 .env
 teste.js
+.vscode/settings.json
